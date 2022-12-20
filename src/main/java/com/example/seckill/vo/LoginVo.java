@@ -1,8 +1,14 @@
 package com.example.seckill.vo;
 
+import com.example.seckill.validator.IsMobile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * vo 值对象(Value Object)
@@ -17,6 +23,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginVo {
+    @NotBlank //字符串不能为null，并且字符串必须有至少一个非空字符
+    @IsMobile
     private String mobile;
+
+    @NotBlank
+    @Length(min = 32) //MD5加密以后均为32位
     private String password;
 }

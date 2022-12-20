@@ -28,12 +28,26 @@ spring:
       testOnReturn: false
       #向数据库发送指定语句验证连接是否有效
       validationQuery: SELECT 1
+  # redis配置
+  redis:
+    host: 127.0.0.1
+    password: 1021
+    port: 6379
+    #获取结果的超时时间
+    timeout: 10000ms
+    lettuce:
+      pool:
+        #最大连接数
+        max-active: 8
+        #最大连接阻塞等待时间，默认为-1
+        max-wait: 10000ms
 #mybatisplus配置
 mybatis-plus:
   #映射文件配置
   mapper-locations: classpath:/mapper/*Mapper.xml
   #指定包下的类自定义别名，默认为类名或者类名首字母小写
   type-aliases-package: com.example.seckill.pojo
+
 
 #打印SQL语句
 logging:
