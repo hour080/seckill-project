@@ -71,7 +71,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         redisTemplate.opsForValue().set("user:" + ticket, user);
         //Cookie cookie = new Cookie(cookieName, cookieValue); response.addCookie(cookie)
         CookieUtil.setCookie(request, response, "userTicket", ticket);
-        return RespBean.success();
+        return RespBean.success(ticket);
     }
 
     @Override
@@ -84,5 +84,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             CookieUtil.setCookie(request, response, "userTicket", cookie);
         }
         return user;
+    }
+
+    /**
+     * 更新密码
+     * 由于缓存和数据库中都保存了用户数据，因此如果修改用户的密码
+     * 如何保证缓存和数据库的数据一致性
+     * 更新数据库的同时删除缓存，并且保证更新数据库和删除缓存的原子性
+     * @param cookie
+     * @param password
+     * @author hourui
+     * @date 2022/12/26 17:00
+     * @return com.example.seckill.vo.RespBean
+     */
+    @Override
+    public RespBean updatePassword(String cookie, String password, HttpServletRequest request, HttpServletResponse response) {
+        User user = getUserByCookie(cookie, request, response);
+        if(user == null){
+            throw new GlobalException(RespBeanEnum.USER_ERROR);
+        }
+        user.setPassword(MD5Util.inputToDBPass(password, user.getSalt()));
+        boolean result = save(user);//更新数据库中的用户信息
+        if(result){
+            redisTemplate.delete("user:" + cookie); //删除缓存
+            return RespBean.success();
+        }
+        return RespBean.error(RespBeanEnum.PASSWORD_UPDATE_FAILED);
     }
 }

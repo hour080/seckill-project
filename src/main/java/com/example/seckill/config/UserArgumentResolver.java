@@ -37,13 +37,14 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         //获得原始的HttpServletRequest和HttpServletResponse
-        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
-        String ticket = CookieUtil.getCookieValue(request, "userTicket");
-        if(!StringUtils.hasText(ticket)){
-            return null;
-        }
-        User user = userService.getUserByCookie(ticket, request, response);
-        return user;
+//        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+//        HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
+//        String ticket = CookieUtil.getCookieValue(request, "userTicket");
+//        if(!StringUtils.hasText(ticket)){
+//            return null;
+//        }
+//        User user = userService.getUserByCookie(ticket, request, response);
+
+        return UserContext.getUser();
     }
 }

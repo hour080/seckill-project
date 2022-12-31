@@ -1,5 +1,6 @@
 package com.example.seckill.config;
 
+import com.example.seckill.interceptor.AccessLimitInterceptor;
 import com.example.seckill.interceptor.UserInterceptor;
 import com.example.seckill.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,23 @@ public class MVCConfig implements WebMvcConfigurer {
     @Autowired
     private UserArgumentResolver userArgumentResolver;
 
+    @Autowired
+    private AccessLimitInterceptor accessLimitInterceptor;
+
     //配置静态资源的路径
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
                 .addResourceLocations("classpath:/static/");
 
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        String[] excludePathPatterns = {
+                "/js/*", "/layer/*", "/img/*", "/bootstrap/*", "/jquery-validation/*", "/login/*"
+        };
+        registry.addInterceptor(accessLimitInterceptor).excludePathPatterns(excludePathPatterns);
     }
 
     /*

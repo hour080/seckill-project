@@ -2,7 +2,10 @@ package com.example.seckill.controller;
 
 
 import com.example.seckill.pojo.User;
+import com.example.seckill.rabbitmq.MQSender;
 import com.example.seckill.vo.RespBean;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    private MQSender mqSender;
+
     /**
      * 展示用户信息
      * @param user
@@ -31,4 +37,6 @@ public class UserController {
     public RespBean info(User user){
         return RespBean.success(user);
     }
+
+
 }

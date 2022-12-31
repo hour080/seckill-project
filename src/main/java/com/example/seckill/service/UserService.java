@@ -20,4 +20,12 @@ public interface UserService extends IService<User> {
     RespBean doLogin(LoginVo loginVo, HttpServletRequest request, HttpServletResponse response);
 
     User getUserByCookie(String cookie, HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 更新密码
+     * @author hourui
+     * @date 2022/12/26 16:55
+     * @return com.example.seckill.vo.RespBean
+     */
+    RespBean updatePassword(String cookie, String password, HttpServletRequest request, HttpServletResponse response);
 }
